@@ -1,0 +1,79 @@
+dist: trusty
+git:
+  depth: 1
+language: node_js
+sudo: required
+
+
+before_install:
+  - ./docker-util/sh/install-docker-on-trusty.sh
+  - sudo service docker stop
+  - sudo dockerd --experimental &
+  - docker version
+
+env:
+  global:
+    - DOCKER_IMAGE_NAME=travis-cli
+    - DOCKER_STAGE_IMAGE_NAME=beeglercorpstage/$DOCKER_IMAGE_NAME
+    - IMAGE_SIZE_THRESHOLD=35
+
+install: true
+
+stages:
+  - name: Build
+  - name: Stage Image
+    if: branch = stage AND type = push
+
+jobs:
+  include:
+
+    - stage: Build
+      env:
+        - ALPINE_VERSION=latest
+        - TAG=latest
+      script:
+        - ./sh/ci/build.sh
+
+    - stage: Build
+      env:
+        - ALPINE_VERSION=edge
+        - TAG=alpine-$ALPINE_VERSION
+      script:
+        - ./sh/ci/build.sh
+
+    - stage: Build
+      env:
+        - ALPINE_VERSION=3.5
+        - TAG=alpine-$ALPINE_VERSION
+      script:
+        - ./sh/ci/build.sh
+
+    - stage: Stage Image
+      env:
+        - ALPINE_VERSION=latest
+        - DOCKER_PUBLIC_IMAGE_NAME=$DOCKER_STAGE_IMAGE_NAME
+        - TAG=latest
+      script:
+        - ./sh/ci/build.sh
+        - ./sh/ci/deploy.sh
+        - ./sh/ci/test-deploy.sh
+
+    - stage: Stage Image
+      env:
+        - ALPINE_VERSION=edge
+        - DOCKER_PUBLIC_IMAGE_NAME=$DOCKER_STAGE_IMAGE_NAME
+        - TAG=alpine-$ALPINE_VERSION
+      script:
+        - ./sh/ci/build.sh
+        - ./sh/ci/deploy.sh
+        - ./sh/ci/test-deploy.sh
+
+    - stage: Stage Image
+      env:
+        - ALPINE_VERSION=3.5
+        - DOCKER_PUBLIC_IMAGE_NAME=$DOCKER_STAGE_IMAGE_NAME
+        - TAG=alpine-$ALPINE_VERSION
+      script:
+        - ./sh/ci/build.sh
+        - ./sh/ci/deploy.sh
+        - ./sh/ci/test-deploy.sh
