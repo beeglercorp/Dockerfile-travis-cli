@@ -114,29 +114,32 @@ jobs:
     - stage: Promote Stage to Prod
       env:
         - ALPINE_VERSION=latest
-        - DOCKER_IMAGE_NAME=$DOCKER_STAGE_IMAGE_NAME
-        - DOCKER_PUBLIC_IMAGE_NAME=$DOCKER_PROD_IMAGE_NAME
         - TAG=latest
+        - DOCKER_IMAGE_NAME=$DOCKER_STAGE_IMAGE_NAME:$TAG
+        - DOCKER_PUBLIC_IMAGE_NAME=$DOCKER_PROD_IMAGE_NAME
       script:
+        - docker pull $DOCKER_IMAGE_NAME
         - ./sh/ci/push.sh
         - ./sh/ci/test-pull.sh
 
     - stage: Promote Stage to Prod
       env:
         - ALPINE_VERSION=edge
-        - DOCKER_IMAGE_NAME=$DOCKER_STAGE_IMAGE_NAME
-        - DOCKER_PUBLIC_IMAGE_NAME=$DOCKER_PROD_IMAGE_NAME
         - TAG=alpine-$ALPINE_VERSION
+        - DOCKER_IMAGE_NAME=$DOCKER_STAGE_IMAGE_NAME:$TAG
+        - DOCKER_PUBLIC_IMAGE_NAME=$DOCKER_PROD_IMAGE_NAME
       script:
+        - docker pull $DOCKER_IMAGE_NAME
         - ./sh/ci/push.sh
         - ./sh/ci/test-pull.sh
 
     - stage: Promote Stage to Prod
       env:
         - ALPINE_VERSION=3.5
-        - DOCKER_IMAGE_NAME=$DOCKER_STAGE_IMAGE_NAME
-        - DOCKER_PUBLIC_IMAGE_NAME=$DOCKER_PROD_IMAGE_NAME
         - TAG=alpine-$ALPINE_VERSION
+        - DOCKER_IMAGE_NAME=$DOCKER_STAGE_IMAGE_NAME:$TAG
+        - DOCKER_PUBLIC_IMAGE_NAME=$DOCKER_PROD_IMAGE_NAME
       script:
+        - docker pull $DOCKER_IMAGE_NAME
         - ./sh/ci/push.sh
         - ./sh/ci/test-pull.sh
