@@ -26,7 +26,7 @@ stages:
   - name: Stage Image
     if: branch = stage AND type = push
   - name: Compare Build to Stage
-    if: branch = master AND type = push
+    if: branch = master AND type = push AND env(COMPARE_BUILD_TO_STAGE) IS present
   - name: Promote Stage to Prod
     if: branch = master AND type = push
 
