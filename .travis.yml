@@ -21,6 +21,7 @@ install: true
 
 stages:
   - name: Build
+    if: branch != master AND type = pull_request
   - name: Stage Image
     if: branch = stage AND type = push
 
