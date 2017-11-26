@@ -1,10 +1,6 @@
 #!/bin/bash
 
 
-# recommended by travis-ci
-# @see https://docs.travis-ci.com/user/customizing-the-build/#Implementing-Complex-Build-Steps
-set -ev
-
 : ${DOCKER_PUBLIC_IMAGE_NAME:=beeglercorpstage/travis-cli}
 : ${TAG:=latest}
 IMAGE_WITH_TAG=$DOCKER_PUBLIC_IMAGE_NAME:$TAG
