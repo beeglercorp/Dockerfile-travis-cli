@@ -9,7 +9,7 @@ before_install:
   - ./docker-util/sh/install-docker-on-trusty.sh
   - sudo service docker stop
   - sudo dockerd --experimental &
-  - docker version
+  - source ./docker-util/sh/attempt.sh && attempt docker version
 
 env:
   global:
